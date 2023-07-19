@@ -1,0 +1,27 @@
+class Solution {
+  public:
+    // Function to return a list containing the DFS traversal of the graph.
+    
+    void dfs(int V, vector<int> adj[], vector<int> &visited, int node, vector<int> &res)
+    {
+        visited[node] = 1;
+        res.push_back(node);
+        
+        for(auto it: adj[node])
+        {
+            if(!visited[it])
+            {
+                dfs(V,adj,visited,it,res);
+            }
+        }
+    }
+    
+    
+    vector<int> dfsOfGraph(int V, vector<int> adj[]) {
+        
+        vector<int> visited(V,0);
+        vector<int> res;
+        dfs(V, adj, visited, 0, res);
+        return res;
+    }
+};
