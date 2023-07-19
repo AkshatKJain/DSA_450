@@ -1,0 +1,42 @@
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        
+        int n = image.size();
+        int m = image[0].size();
+        
+        vector<vector<int>> visited (n, vector<int> (m,0));
+        queue<pair<int,int>> q;
+        q.push(make_pair(sr,sc));
+        visited[sr][sc] = 1;
+        int color = image[sr][sc]; 
+        image[sr][sc] = newColor;
+        
+        vector<pair<int,int>> temp;
+        temp.push_back(make_pair(0,1));
+        temp.push_back(make_pair(0,-1));
+        temp.push_back(make_pair(1,0));
+        temp.push_back(make_pair(-1,0));
+        
+        while(!q.empty())
+        {
+            int i = q.front().first;
+            int j = q.front().second;
+            q.pop();
+            
+            for(auto it:temp)
+            {
+                if((it.first + i) < n && (it.first + i) >=0 && (it.second + j) < m && (it.second + j) >= 0)
+                {
+                    if(visited[it.first + i][it.second + j] == 0 && image[it.first + i][it.second + j] == color)
+                    {
+                        visited[it.first + i][it.second + j] = 1;
+                        image[it.first + i][it.second + j] = newColor;
+                        q.push(make_pair(it.first + i, it.second + j ));
+                    }
+                }
+            }
+        }
+        return image;
+    }
+};
