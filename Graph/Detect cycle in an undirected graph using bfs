@@ -1,54 +1,50 @@
 class Solution {
   public:
-   void bfs(int node, vector<int> &visited, vector<int> adj[], bool &cycle)
-   {
-       queue<pair<int, int>>q;
-       q.push({node, -1});
-       while(!q.empty())
-       {
-           int node = q.front().first;
-           int p = q.front().second;
-           q.pop();
-           
-           for(auto it: adj[node])
-           {
-               if(it != p)
-               {
-                   if(visited[it] == 1)
-                   {
-                       cycle = true;
-                   }
-                   else
-                   {
-                       q.push({it,node});
-                       visited[it] =1;
-                   }
-                   
-                   if(cycle = true)
-                   {
-                       return;
-                   }
-               }
-           }
-       }
-   }
-    bool isCycle(int V, vector<int> adj[]) {
-        vector<int> visited (V, 0);
-        bool cycle = false;
-        
-        for(int i = 0; i<V; i++)
+    bool fn(int node, vector<int> &visited, vector<int> adj[])
+    {
+        visited[node] = 1;
+        queue<pair<int,int>> q;
+        q.push({node, -1});
+        while(!q.empty())
         {
-            if(!visited[i])
+            int n = q.front().first;
+            int p = q.front().second;
+            q.pop();
+            
+            for(auto it: adj[n])
             {
-                visited[i] = 1;
-                bfs(i, visited, adj, cycle);
-            }
-            if(cycle == true)
-            {
-                break;
+                if(!visited[it] && it != p)
+                {
+                    visited[it] = 1;
+                    q.push({it, n});
+                }
+                else if(visited[it] && it != p)
+                {
+                    return true;
+                }
             }
         }
         
-        return cycle;
+        return false;
+    }
+    
+    
+    bool isCycle(int V, vector<int> adj[]) {
+        
+        vector<int> visited(V, 0);
+        
+        for(int i=0; i<V; i++)
+        {
+            if(!visited[i])
+            {
+                if(fn(i, visited, adj))
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+        
     }
 };
