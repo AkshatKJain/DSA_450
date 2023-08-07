@@ -1,0 +1,49 @@
+class Solution {
+public:
+
+    int f(vector<int> &nums,vector<int> &dp, int index)
+    {
+        if(index == 0)
+        {
+            return nums[0];
+        }
+        if(index < 0)
+        {
+            return 0;
+        }
+        if(dp[index] != -1)
+        {
+            return dp[index];
+        }
+
+        int take = nums[index] + f(nums,dp, index-2);
+        int nottake = f(nums,dp, index-1);
+
+        return dp[index] = max(take, nottake);
+
+    }
+
+    
+    int rob(vector<int>& nums) {
+
+        int n = nums.size();
+        vector<int> dp(n+1, -1);
+        vector<int> dp2(n+1, -1);
+
+        vector<int> temp1 ;
+        vector<int> temp2;
+
+        for(int i=0; i<nums.size(); i++)
+        {
+            if(i!=0)
+                temp1.push_back(nums[i]);
+            if(i != n-1)
+                temp2.push_back(nums[i]);
+        }
+
+        int one = f(temp2, dp, n-3);
+        int two = f(temp1, dp2, n-2);
+
+        return max(one, two);
+    }
+};
