@@ -1,0 +1,27 @@
+#include <bits/stdc++.h> 
+
+int fn(vector<int> &heights, int index, vector<int> &dp)
+{
+    if(dp[index] != -1)
+    {
+        return dp[index];
+    }
+    if(index == 0)
+    {
+        return 0;
+    }
+
+    int op1 = fn(heights, index-1, dp) + abs(heights[index] - heights[index-1]);
+    int op2 = INT_MAX;
+    if(index > 1)
+        op2 = fn(heights, index-2, dp) + abs(heights[index] - heights[index - 2]);
+
+    return dp[index] = min(op1, op2);
+}
+
+int frogJump(int n, vector<int> &heights)
+{
+    vector<int> dp(n+1, -1);
+
+    return fn(heights, n-1, dp);
+}
