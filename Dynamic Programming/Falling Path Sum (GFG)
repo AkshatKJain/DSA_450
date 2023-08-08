@@ -1,0 +1,39 @@
+class Solution {
+public:
+
+    int f(vector<vector<int>>& matrix, int i, int j, vector<vector<int>>& dp)
+    {
+        if(i<0 || j<0 || j >= matrix.size())
+        {
+            return 1e5;
+        }
+        if(i == 0)
+        {
+            return matrix[0][j];
+        }
+        if(dp[i][j] != -1)
+        {
+            return dp[i][j];
+        }
+
+        int up = matrix[i][j] + f(matrix, i-1,j, dp);
+        int left = matrix[i][j] + f(matrix, i-1, j-1, dp);
+        int right = matrix[i][j] + f(matrix, i-1, j+1,dp);
+
+        return dp[i][j] = min(up, min(left, right));
+    }
+
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+
+        int m = matrix.size();
+        int mini = 1e5;
+        vector<vector<int>> dp (m, vector<int>(m, -1));
+
+        for(int j=0; j< m; j++)
+        {
+            mini = min(mini, f(matrix, m-1, j, dp)); 
+        }
+
+        return mini;
+    }
+};
