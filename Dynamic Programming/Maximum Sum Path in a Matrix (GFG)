@@ -1,0 +1,40 @@
+class Solution{
+public:
+    
+    int f(int i, int j, vector<vector<int>> matrix, int N, vector<vector<int>> &dp)
+    {
+        if(i >= N || j >= N || j < 0)
+        {
+            return 0;
+        }
+        
+        if(i == N-1 && j < N)
+        {
+            return matrix[i][j];
+        }
+        
+        if(dp[i][j] != -1)
+        {
+            return dp[i][j];
+        }
+        
+        int op1 = matrix[i][j] + f(i+1, j, matrix, N, dp);
+        int op2 = matrix[i][j] + f(i+1, j-1, matrix, N, dp);
+        int op3 = matrix[i][j] + f(i+1, j+1, matrix, N, dp);
+        
+        return dp[i][j] = max(op1, max(op2,op3));
+    }
+
+    int maximumPath(int N, vector<vector<int>> Matrix)
+    {
+        vector<vector<int>> dp(N+1, vector<int>(N, -1));
+        int maxi = -1;
+        for(int j=0; j < N; j++)
+        {
+            int temp = f(0, j, Matrix, N, dp);
+            maxi = max(temp, maxi);
+        }
+        
+        return maxi;
+    }
+};
