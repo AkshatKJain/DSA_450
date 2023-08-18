@@ -1,5 +1,4 @@
-#include <bits/stdc++.h> 
-
+#include <bits/stdc++.h>
 int fn(vector<int> &nums, vector<int> &dp, int index)
 {
     if(dp[index] != -1)
