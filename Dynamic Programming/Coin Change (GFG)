@@ -1,0 +1,77 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+class Solution {
+  public:
+    
+    long long int f(int index, int target, int coins[], int N, vector<vector<long long int>> &dp)
+    {
+        if(index == 0)
+        {
+            return (target % coins[index] == 0);
+        }
+        if(dp[index][target] != -1)
+        {
+            return dp[index][target];
+        }
+        
+        long long int nottake = f(index-1, target, coins, N, dp);
+        long long int take = 0;
+        if(coins[index] <= target)
+        {
+            take = f(index, target - coins[index], coins, N, dp);
+        }
+        
+        return dp[index][target] = take + nottake;
+    }
+  
+  
+    long long int count(int coins[], int N, int sum) {
+        vector<vector<long long int>> dp (N, vector<long long int>(sum+1, 0));
+        
+        // return f(N-1, sum, coins, N, dp);
+        
+        for(int i=0;i<=sum;i++)
+        {
+            if(i%coins[0]==0)
+                dp[0][i]=1;
+        }
+        
+        for(int ind=1; ind<N;ind++)
+        {
+            for(int target=0;target<=sum;target++)
+            {
+                long notTaken = dp[ind-1][target];
+                
+                long taken = 0;
+                if(coins[ind]<=target)
+                    taken = dp[ind][target-coins[ind]];
+                    
+                dp[ind][target] = notTaken + taken;
+            }
+        }
+        return dp[N-1][sum];
+        
+    }
+};
+
+//{ Driver Code Starts.
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int sum, N;
+        cin >> sum >> N;
+        int coins[N];
+        for (int i = 0; i < N; i++) cin >> coins[i];
+        Solution ob;
+        cout << ob.count(coins, N, sum) << endl;
+    }
+
+    return 0;
+}
+
+
+// } Driver Code Ends
