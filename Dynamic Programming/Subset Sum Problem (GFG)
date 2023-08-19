@@ -1,4 +1,4 @@
-{ Driver Code Starts
+//{ Driver Code Starts
 //Initial template for C++
 
 #include<bits/stdc++.h> 
@@ -9,35 +9,37 @@ using namespace std;
 
 class Solution{   
 public:
-    bool f(vector<int>arr, int index, int sum, vector<vector<int>> &dp)
+
+    bool f(int i, int target, vector<int> arr, vector<vector<int>> &dp)
     {
-        if(sum == 0)
+        if(target == 0)
         {
             return true;
         }
-        if(index == 0)
+        
+        if(i == 0)
         {
-            return arr[index] == sum;
-        }
-        if(dp[index][sum] != -1)
-        {
-            return dp[index][sum];
+            return (target == arr[0]);
         }
         
-        bool nottake = f(arr, index-1, sum,dp);
+        if(dp[i][target] != -1)
+        {
+            return dp[i][target];
+        }
+        
+        bool nottake = f(i-1, target, arr, dp);
         bool take = false;
-        if(arr[index] <= sum)
+        if(arr[i] <= target)
         {
-            take = f(arr, index - 1, sum - arr[index], dp);
+            take = f(i-1, target - arr[i], arr, dp);
         }
         
-        return dp[index][sum] = take | nottake;
+        return dp[i][target] = nottake | take;
     }
 
     bool isSubsetSum(vector<int>arr, int sum){
-        // code here 
-        vector<vector<int>> dp(arr.size()+1, vector<int>(sum+1, -1));
-        return f(arr, arr.size()-1, sum, dp);
+        vector<vector<int>> dp(arr.size(), vector<int>(sum+1, -1));
+        return f(arr.size()-1, sum, arr, dp);
     }
 };
 
