@@ -1,4 +1,4 @@
-{ Driver Code Starts
+//{ Driver Code Starts
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -6,15 +6,15 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-    
-    int f(int n, int m, vector<vector<int>>& grid, int i, int j1, int j2, vector<vector<vector<int>>> &dp)
+    int f(int i, int j1, int j2, vector<vector<int>> &grid, int n, int m, vector<vector<vector<int>>> &dp)
     {
+        
         if(j1 < 0 || j2 < 0 || j1 >= m || j2 >= m)
         {
-            return -1e8;
+            return -1e9;
         }
         
-        if(i == n-1)
+        if( i == n-1)
         {
             if(j1 == j2)
             {
@@ -31,37 +31,29 @@ class Solution {
             return dp[i][j1][j2];
         }
         
-        int maxi = -1e8;
-        
-        for(int dj1=-1; dj1 <= 1; dj1++)
+        int maxi = -1e9;
+        for(int col1 = -1; col1 <= 1; col1++)
         {
-            for(int dj2 = -1; dj2 <= 1; dj2++)
+            for(int col2 = -1; col2 <= 1; col2++)
             {
-                int value = 0;
-                
                 if(j1 == j2)
                 {
-                    value = grid[i][j1];
+                    maxi = max(maxi, grid[i][j1] + f(i+1, j1 + col1, j2 + col2, grid, n, m, dp)) ;
                 }
                 else
                 {
-                    value = grid[i][j1] + grid[i][j2];
+                    maxi = max(maxi, grid[i][j1] + grid[i][j2] + f(i+1, j1 + col1, j2 + col2, grid, n, m, dp));
                 }
-                
-                value += f(n,m,grid,i+1, j1 + dj1, j2 + dj2, dp);
-                maxi = max(maxi, value);
             }
         }
-        
         return dp[i][j1][j2] = maxi;
     }
-
+  
   
     int solve(int n, int m, vector<vector<int>>& grid) {
         
         vector<vector<vector<int>>> dp(n, vector<vector<int>>(m, vector<int>(m, -1)));
-        
-        return f(n,m,grid,0, 0, m-1, dp);
+        return f(0, 0, m-1, grid, n, m, dp);
         
     }
 };
