@@ -1,6 +1,5 @@
 class Solution {
 public:
-
     int fn(int ind, vector<int> &dp)
     {
         if(dp[ind] != -1)
