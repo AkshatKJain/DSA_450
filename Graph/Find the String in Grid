@@ -1,0 +1,125 @@
+//{ Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+class Solution {
+public:
+
+    bool dfs(int indexi, int indexj, pair<int, int> &dir, int level, vector<vector<char>> grid, string word, vector<pair<int,int>>& v)
+    {
+        int n = grid.size();
+	    int m = grid[0].size();
+	    
+        if(indexi < 0 || indexj <0 || indexi >= n || indexj >= m)
+        {
+            return false;
+        }
+        if(grid[indexi][indexj] != word[level])
+        {
+            return false;
+        }
+        if(grid[indexi][indexj] == word[level] && level == word.size() - 1)
+        {
+            return true;
+        }
+        
+        for(int k = 0; k< 8; k++)
+        {
+            if(dir == v[k])
+            {
+                if(dfs(indexi + v[k].first, indexj + v[k].second, dir, level+1, grid, word, v) == true)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+	vector<vector<int>>searchWord(vector<vector<char>>grid, string word){
+	    
+	    vector<pair<int,int>> v;
+	    v.push_back({-1,-1});
+	    v.push_back({-1,0});
+	    v.push_back({-1,1});
+	    v.push_back({0,-1});
+	    v.push_back({0,1});
+	    v.push_back({1,-1});
+	    v.push_back({1,0});
+	    v.push_back({1,1});
+	    
+	    int n = grid.size();
+	    int m = grid[0].size();
+	    vector<vector<int>> ans;
+	    
+	    for(int i=0; i<n; i++)
+	    {
+	        for(int j=0; j<m; j++)
+	        {
+	            if(grid[i][j] == word[0])
+	            {
+	                for(int k = 0; k < 8; k++)
+	                {
+	                    if(word.size() == 1)
+	                    {
+	                        ans.push_back({i,j});
+	                        break;
+	                    }
+	                    if(dfs(i + v[k].first, j + v[k].second, v[k], 1, grid, word, v) == true)
+	                    {
+	                        
+	                        ans.push_back({i,j});
+	                        break;
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    
+	    if(ans.size() == 0)
+	    {
+	        return {};
+	    }
+	    else
+	    {
+	        return ans;
+	    }
+	    
+	}
+};
+
+//{ Driver Code Starts.
+int main(){
+	int tc;
+	cin >> tc;
+	while(tc--){
+		int n, m;
+		cin >> n >> m;
+		vector<vector<char>>grid(n, vector<char>(m,'x'));
+		for(int i = 0; i < n; i++){
+			for(int j = 0; j < m; j++)
+				cin >> grid[i][j];
+		}
+		string word;
+		cin >> word;
+		Solution obj;
+		vector<vector<int>>ans = obj.searchWord(grid, word);
+		if(ans.size() == 0)
+		{
+		    cout<<"-1\n";
+		}
+		else
+		{
+		    for(auto i: ans){
+			for(auto j: i)
+				cout << j << " ";
+			cout << "\n";
+		    }
+		}
+		
+		
+	}
+	return 0;
+}
+// } Driver Code Ends
