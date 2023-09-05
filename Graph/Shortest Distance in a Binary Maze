@@ -13,6 +13,9 @@ class Solution {
     int shortestPath(vector<vector<int>> &grid, pair<int, int> source,
                      pair<int, int> destination) {
         
+        if(source.first == destination.first && source.second == destination.second)
+            return 0;
+        
         int n = grid.size();
         int m = grid[0].size();
         queue<pair<int, pair<int, int>>> q;
