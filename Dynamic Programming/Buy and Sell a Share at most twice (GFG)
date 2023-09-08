@@ -1,0 +1,81 @@
+//{ Driver Code Starts
+//Initial Template for C++
+#include<bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+//User function Template for C++
+
+int f(int index, int buy, int cap, vector<int>&prices, vector<vector<vector<int>>> &dp)
+{
+    if(index == prices.size()) return 0;
+    if(cap == 0)return 0;
+    
+    if(dp[index][buy][cap] != -1) return dp[index][buy][cap];
+    
+    if(buy)
+    {
+        int op1 = -prices[index] + f(index+1, 0, cap, prices, dp);
+        int op2 = f(index+1, 1, cap, prices, dp);
+        return dp[index][buy][cap] = max(op1, op2);
+    }
+    else
+    {
+        int op1 = prices[index] + f(index+1, 1, cap-1, prices, dp);
+        int op2 = f(index+1, 0, cap, prices, dp);
+        return dp[index][buy][cap] = max(op1, op2);
+    }
+}
+
+
+int maxProfit(vector<int>&prices){
+    
+    int n = prices.size();
+    // vector<vector<vector<int>>> dp(n+1, vector<vector<int>>(2, vector<int>(3, 0)));
+    vector<vector<int>> ahead(2, vector<int>(3, 0));
+    vector<vector<int>> curr(2, vector<int>(3, 0));
+    
+    for(int index = n-1; index >=0; index--)
+    {
+        for(int buy = 0; buy < 2; buy++)
+        {
+            for(int cap =1; cap <3; cap++)
+            {
+                if(buy)
+                {
+                    int op1 = -prices[index] + ahead[0][cap];
+                    int op2 = ahead[1][cap];
+                    curr[buy][cap] = max(op1, op2);
+                }
+                else
+                {
+                    int op1 = prices[index] + ahead[1][cap-1];
+                    int op2 = ahead[0][cap];
+                    curr[buy][cap] = max(op1, op2);
+                }
+            }
+        }
+        ahead = curr;
+    }
+    
+    return ahead[1][2];
+}
+
+//{ Driver Code Starts.
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        
+        int n;
+        cin>>n;
+        vector<int> price(n);
+        for(int i=0;i<n;i++) cin>>price[i];
+        cout<<maxProfit(price)<<endl;
+    }
+
+}
+
+// } Driver Code Ends
