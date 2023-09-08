@@ -1,0 +1,76 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+class Solution{
+    public:
+    
+    long long f(int index, int buy, vector<long long>&prices, vector<vector<long long>> &dp)
+    {
+        if(index >= prices.size()) return 0;
+        if(dp[index][buy] != -1)return dp[index][buy];
+        
+        if(buy)
+        {
+            long long op1 = -prices[index] + f(index+1, 0, prices, dp);
+            long long op2 = f(index+1, 1, prices, dp);
+            return dp[index][buy] = max(op1, op2);
+        }
+        else
+        {
+            long long op1 = prices[index] + f(index+2, 1, prices, dp);
+            long long op2 = f(index+1, 0, prices, dp);
+            return dp[index][buy] = max(op1, op2);
+        }
+    }
+    
+    long long maximumProfit(vector<long long>&prices, int n) {
+        
+        vector<vector<long long>> dp(n+2, vector<long long>(2, 0));
+        
+        vector<int> ahead1(2, 0), ahead2(2,0), curr(2, 0);
+        
+        for(int index = n-1; index >= 0; index --)
+        {
+            
+                
+                
+                    long long op1 = -prices[index] + ahead1[0];
+                    long long op2 = ahead1[1];
+                    curr[1] = max(op1, op2);
+                
+                
+                
+                    long long op3 = prices[index] + ahead2[1];
+                    long long op4 = ahead1[0];
+                    curr[0] = max(op3, op4);
+                
+            ahead2 = ahead1;
+            ahead1 = curr;
+        }
+        
+        return curr[1];
+    }
+};
+
+//{ Driver Code Starts.
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--){
+        int n; cin>>n;
+        vector<long long> prices;
+        
+        for(int i=0; i<n; ++i){
+            long long x; cin>>x;
+            prices.push_back(x);
+        }
+        
+        Solution obj;
+        cout<<obj.maximumProfit(prices, n)<<"\n";
+    }
+    return 0;
+}
+// } Driver Code Ends
