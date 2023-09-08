@@ -1,0 +1,60 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+class Solution{
+    public:
+    
+    long long f(int index, int buy, vector<long long>&prices, vector<vector<long long>> &dp, int fee)
+    {
+        if(index == prices.size())
+        {
+            return 0;
+        }
+        
+        if(dp[index][buy] != -1) return dp[index][buy];
+        
+        if(buy)
+        {
+            long long op1 = -prices[index] + f(index+1, 0, prices, dp, fee);
+            long long op2 = 0 + f(index+1, 1, prices, dp, fee);
+            return dp[index][buy] = max(op1, op2);
+        }
+        else
+        {
+            long long op1 = prices[index] - fee + f(index+1, 1, prices, dp, fee);
+            long long op2 = f(index+1, 0, prices, dp, fee);
+            return dp[index][buy] = max(op1, op2);
+        }
+    }
+    
+    long long maximumProfit(vector<long long>&prices, int n, int fee) {
+        
+        vector<vector<long long>> dp(n, vector<long long>(2, -1));
+        return f(0, 1, prices, dp, fee);
+    }
+};
+
+//{ Driver Code Starts.
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--){
+        int n; cin>>n;
+        vector<long long> prices;
+        
+        for(int i=0; i<n; ++i){
+            long long x; cin>>x;
+            prices.push_back(x);
+        }
+        
+        int fee; cin>>fee;
+        
+        Solution obj;
+        cout<<obj.maximumProfit(prices, n, fee)<<"\n";
+    }
+    return 0;
+}
+// } Driver Code Ends
