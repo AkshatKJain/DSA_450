@@ -1,0 +1,88 @@
+//{ Driver Code Starts
+// Initial template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+// User function Template for C++
+
+class Solution {
+  public:
+    
+    int f(int index, int buy, int cap, int prices[], vector<vector<vector<int>>> &dp, int n)
+    {
+        if(index == n)return 0;
+        if(cap == 0)return 0;
+        
+        if(dp[index][buy][cap] != -1) return dp[index][buy][cap];
+        
+        if(buy)
+        {
+            int op1 = -prices[index] + f(index+1, 0, cap, prices, dp, n);
+            int op2 = f(index+1, 1, cap, prices, dp, n);
+            
+            return dp[index][buy][cap] =  max(op1, op2);
+        }
+        else
+        {
+            int op1 = prices[index] + f(index+1, 1, cap-1, prices, dp, n);
+            int op2 = f(index+1, 0, cap, prices, dp, n);
+            
+            return dp[index][buy][cap] =  max(op1, op2);
+        }
+    }
+  
+    int maxProfit(int k, int n, int prices[]) {
+        
+        // vector<vector<vector<int>>> dp(n+1, vector<vector<int>>(2, vector<int>(k+1, 0)));
+        vector<vector<int>> ahead(2, vector<int>(k+1, 0));
+        vector<vector<int>> curr(2, vector<int>(k+1, 0));
+        
+        for(int index = n-1; index >= 0; index--)
+        {
+            for(int buy = 0; buy < 2; buy ++)
+            {
+                for(int cap = 1; cap <= k; cap ++)
+                {
+                    if(buy)
+                    {
+                        int op1 = -prices[index] + ahead[0][cap];
+                        int op2 = ahead[1][cap];
+                        
+                        curr[buy][cap] =  max(op1, op2);
+                    }
+                    else
+                    {
+                        int op1 = prices[index] + ahead[1][cap-1];
+                        int op2 = ahead[0][cap];
+                        
+                        curr[buy][cap] =  max(op1, op2);
+                    }
+                }
+            }
+            ahead = curr;
+        }
+        
+        
+        return ahead[1][k];
+    }
+};
+
+//{ Driver Code Starts.
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int N, K;
+        cin >> K;
+        cin >> N;
+        int A[N];
+        for (int i = 0; i < N; i++) cin >> A[i];
+
+        Solution ob;
+        cout << ob.maxProfit(K, N, A) << endl;
+    }
+    return 0;
+}
+// } Driver Code Ends
